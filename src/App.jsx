@@ -21,8 +21,10 @@ const App = () => {
     }
 
     try {
+      console.log("API Base URL:", import.meta.env.VITE_API_URL);
+
       const response = await axios.get(
-        `${process.env.REACT_APP_API_BASE_URL}/market/daily-signals`,
+        `${import.meta.env.VITE_API_URL}/market/daily-signals`,
         {
           params: {
             tickers: selectedTickers.join(","),
