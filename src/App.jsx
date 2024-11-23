@@ -20,18 +20,20 @@ const App = () => {
       return;
     }
 
-    try {
-      console.log("API Base URL:", import.meta.env.VITE_API_URL);
+    const baseUrl = import.meta.env.VITE_API_URL;
+    if (!baseUrl) {
+      console.error("La variable REACT_APP_API_BASE_URL no está definida");
+      alert("Error interno: Base URL no configurada");
+      return;
+    }
 
-      const response = await axios.get(
-        `${import.meta.env.VITE_API_URL}/market/daily-signals`,
-        {
-          params: {
-            tickers: selectedTickers.join(","),
-            interval: "1d",
-          },
-        }
-      );
+    try {
+      const response = await axios.get(`${baseUrl}/market/daily-signals`, {
+        params: {
+          tickers: selectedTickers.join(","),
+          interval: "1d",
+        },
+      });
       setResults(response.data);
     } catch (error) {
       console.error("Error fetching signals:", error);
@@ -72,10 +74,10 @@ const App = () => {
       </div>
 
       <button onClick={fetchSignals} style={{ marginBottom: "20px" }}>
-        Consultar Señales
+        Consultar Señales:
       </button>
 
-      <h2>Resultados</h2>
+      <h2>Resultados:</h2>
       <div>
         {results.map(({ ticker, buy, sell, currentPrice }) => (
           <div key={ticker}>
